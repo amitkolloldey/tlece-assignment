@@ -96,7 +96,7 @@ DB_PASSWORD=tlece_password
 Run the database migrations to set up the database structure:
 
 ```sh
-php artisan migrate
+docker exec -it tlece_app php artisan migrate
 ```
 
 ---
