@@ -13,7 +13,7 @@ Make sure you have the following installed on your system:
 
 ### 1. Clone the Repository
 ```sh
-git clone https://github.com/your-username/tlece-assignment.git
+git clone https://github.com/amitkolloldey/tlece-assignment.git
 cd tlece-assignment
 ```
 
