@@ -1,85 +1,102 @@
-# Tlece Assignment
+## Tlece Assignment
 
-Assignement project for Tlece
+**Assignment Project for Tlece**
 
-## Prerequisites
+### Prerequisites
+
 Make sure you have the following installed on your system:
 
-- [Docker](https://www.docker.com/get-started)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-- [Git](https://git-scm.com/)
+- Docker
+- Docker Compose
+- Git
 
-## Installation Steps
+---
 
-### 1. Clone the Repository
+### Installation Steps
+
+#### 1. **Clone the Repository**
+
+Clone the repository and navigate to the project folder:
+
 ```sh
 git clone https://github.com/amitkolloldey/tlece-assignment.git
 cd tlece-assignment
 ```
 
-### 2. Set Up Environment Variables
-Copy the example `.env` file and modify it as needed:
+---
+
+#### 2. **Set Up Environment Variables**
+
+Copy the example `.env` file to the correct location and modify it to match your environment:
+
 ```sh
 cp tlece_app/.env.example tlece_app/.env
 ```
-Ensure the database and Redis configurations match the ones set in `docker-compose.yml`.
 
-### 3. Build and Start the Containers
-Run the following command to build and start the application:
+---
+
+#### 3. **Build and Start the Containers**
+
+Run the following command to start the containers:
+
 ```sh
-docker-compose up -d --build
+docker compose up -d --build
 ```
-This will start:
-- **PHP FPM container** for Laravel
-- **MySQL database**
-- **Nginx web server**
-- **Redis** for caching and queue handling
-- **PhpMyAdmin** for database management
 
-### 4. Install Dependencies
-Run the following inside the `app` container:
+This will set up the following containers:
+- **PHP FPM** (Laravel runtime)
+- **MySQL** (database)
+- **Nginx** (web server)
+- **PhpMyAdmin** (for database management)
+
+---
+
+#### 4. **Install Dependencies**
+
+Once the containers are running, install the necessary PHP and JS dependencies inside the `app` container:
+
 ```sh
 docker exec -it tlece_app bash
 composer install --no-dev --optimize-autoloader
 npm install && npm run build
 php artisan key:generate
-php artisan migrate --seed
 exit
 ```
 
-### 5. Set Permissions
-Ensure Laravel storage and cache directories have the correct permissions:
-```sh
-docker exec -it tlece_app bash
-chmod -R 775 storage bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache
-exit
-```
+---
 
-### 6. Running the Application
-Once the containers are running, access the application via:
+#### 5. **Running the Application**
+
+Once the setup is complete, you can access the application:
+
 - **Application URL**: [http://localhost:8000](http://localhost:8000)
-- **PhpMyAdmin**: [http://localhost:8080](http://localhost:8080) (Username: `tlece_user`, Password: `tlece_password`)
+- **PhpMyAdmin**: [http://localhost:8080](http://localhost:8080)  
+  - Username: `tlece_user`
+  - Password: `tlece_password`
 
-### 7. Managing Queues
-Laravel queues are managed using Redis. Start the queue worker:
-```sh
-docker exec -it tlece_app bash
-php artisan queue:work
+---
+
+#### 6. **Database Credentials (in `.env`)**
+
+Make sure the database credentials in your `.env` file are set correctly:
+
+```plaintext
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=tlece_db
+DB_USERNAME=tlece_user
+DB_PASSWORD=tlece_password
 ```
 
-### 8. Stopping the Application
-To stop and remove the running containers, use:
+---
+
+#### 7. **Database Migrations**
+
+Run the database migrations to set up the database structure:
+
 ```sh
-docker-compose down
+php artisan migrate
 ```
 
-### 9. Logs & Debugging
-To view logs for debugging:
-```sh
-docker logs -f tlece_app
-```
-To get into the app container shell:
-```sh
-docker exec -it tlece_app bash
-```
+---
